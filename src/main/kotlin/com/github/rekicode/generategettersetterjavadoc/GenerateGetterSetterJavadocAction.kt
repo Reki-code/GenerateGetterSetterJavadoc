@@ -10,7 +10,6 @@ import com.intellij.psi.*
 import com.intellij.ui.ScrollPaneFactory
 import com.intellij.ui.components.JBList
 import org.jetbrains.annotations.NonNls
-import java.util.*
 import javax.swing.DefaultListModel
 import javax.swing.JComponent
 import javax.swing.ListSelectionModel
@@ -65,11 +64,7 @@ class GenerateGetterSetterJavadocAction : AnAction() {
         // Get the field name
         val fieldName = field.name
         // Generate the method name
-        val methodName = "get" + fieldName.replaceFirstChar {
-            if (it.isLowerCase()) it.titlecase(
-                Locale.getDefault()
-            ) else it.toString()
-        }
+        val methodName = "get" + capitalize(fieldName)
         // Get the element factory
         val elementFactory: PsiElementFactory = JavaPsiFacade.getElementFactory(project)
 
@@ -112,11 +107,7 @@ class GenerateGetterSetterJavadocAction : AnAction() {
         // Get the field name
         val fieldName = field.name
         // Generate the method name
-        val methodName = "set" + fieldName.replaceFirstChar {
-            if (it.isLowerCase()) it.titlecase(
-                Locale.getDefault()
-            ) else it.toString()
-        }
+        val methodName = "set" + capitalize(fieldName)
         // Get the element factory
         val elementFactory: PsiElementFactory = JavaPsiFacade.getElementFactory(project)
 
