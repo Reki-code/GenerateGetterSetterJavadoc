@@ -119,6 +119,8 @@ class GenerateGetterSetterJavadocAction : AnAction() {
         val setterText = """
                 /**
                 * ${fieldDocCommentText}の設定
+                * 
+                * @param $fieldName $fieldDocCommentText
                 */
                 public void $methodName(${field.type.presentableText} $fieldName) {
                     this.$fieldName = $fieldName;
