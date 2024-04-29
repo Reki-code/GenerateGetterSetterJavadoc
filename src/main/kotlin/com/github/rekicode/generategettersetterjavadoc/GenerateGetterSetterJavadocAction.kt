@@ -64,7 +64,8 @@ class GenerateGetterSetterJavadocAction : AnAction() {
         // Get the field name
         val fieldName = field.name
         // Generate the method name
-        val methodName = "get" + capitalize(fieldName)
+        val preffix = if (field.type.equalsToText("boolean")) "is" else "get"
+        val methodName = preffix + capitalize(fieldName)
         // Get the element factory
         val elementFactory: PsiElementFactory = JavaPsiFacade.getElementFactory(project)
 
