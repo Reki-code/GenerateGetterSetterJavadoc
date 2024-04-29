@@ -24,32 +24,38 @@ class GenerateGetterSetterJavadocAction : AnAction() {
         // Get the current file
         val psiFile = e.getData(CommonDataKeys.PSI_FILE)
         // Check if the file is a Java file
-        if (psiFile is PsiJavaFile) {
-            // Get the classes in the Java file
-            val classes: Array<PsiClass> = psiFile.classes
-            // Loop through each class
-            for (aClass in classes) {
-                // Create a dialog for field selection
-                val dialog = FieldSelectionDialog(project, aClass.fields)
-                // Show the dialog
-                dialog.show()
-                // Check if the dialog was confirmed
-                if (dialog.isOK) {
-                    // Get the selected fields
-                    val selectedFields: List<PsiField> = dialog.selectedFields
-                    // Run a write command action
-                    WriteCommandAction.runWriteCommandAction(project) {
-                        // Loop through each selected field
-                        for (field in selectedFields) {
-                            // Generate the getter and setter for the field
-                            val getter: PsiMethod = generateGetter(project, field)
-                            val setter: PsiMethod = generateSetter(project, field)
-                            // Add the getter and setter to the class
-                            aClass.add(getter)
-                            aClass.add(setter)
-                        }
-                    }
-                }
+        if (psiFile !is PsiJavaFile) return
+        // Get the classes in the Java file
+        val classes: Array<PsiClass> = psiFile.classes
+        // Loop through each class
+        for (aClass in classes) {
+            // Create a dialog for field selection
+            val dialog = FieldSelectionDialog(project, aClass.fields)
+            // Show the dialog
+            dialog.show()
+            // Check if the dialog was confirmed
+            if (!dialog.isOK) continue
+            // Get the selected fields
+            val selectedFields: List<PsiField> = dialog.selectedFields
+            // Run a write command action
+            writeSetterGetter(project, selectedFields, aClass)
+        }
+    }
+
+    private fun writeSetterGetter(
+        project: Project,
+        selectedFields: List<PsiField>,
+        aClass: PsiClass
+    ) {
+        WriteCommandAction.runWriteCommandAction(project) {
+            // Loop through each selected field
+            for (field in selectedFields) {
+                // Generate the getter and setter for the field
+                val getter: PsiMethod = generateGetter(project, field)
+                val setter: PsiMethod = generateSetter(project, field)
+                // Add the getter and setter to the class
+                aClass.add(getter)
+                aClass.add(setter)
             }
         }
     }
