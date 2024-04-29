@@ -99,6 +99,7 @@ class GenerateGetterSetterJavadocAction : AnAction() {
         val fieldDocCommentText = fieldDocComment
             .replace("/**", "")
             .replace("*/", "")
+            .replace(Regex("^\\s*\\*"), "")
             .trim()
         return fieldDocCommentText
     }
